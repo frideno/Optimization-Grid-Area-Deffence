@@ -205,12 +205,13 @@ def generate_random_example(n, target):
 
 def draw_graph_and_results(M, r, sensors, block_roads, filename):
     """
-    draw the graph to plot, then color  in purple the results.  enternece nodes are in triangle shape.
+    draw the graph to plot, then color  in purple the results.  enternece nodes are in rectangle shape.
     save the plot to filename.png
     if blockroads != 2 it also draws the edges to remove,else only sensors.  
     """
 
     n = len(r)
+    N = int(np.sqrt(n))
 
     # add nodes, edges and lables for them.
     Gd = nx.DiGraph()
@@ -240,26 +241,31 @@ def draw_graph_and_results(M, r, sensors, block_roads, filename):
         shapes = []
         for i in range(n):
             if r[i] > 0:
-                shapes.append('v')
+                shapes.append('s')
             else:
                 shapes.append('o')
 
 
+    # define proportional font size for the lables, by n (the bigger n is the smaller it needs be. the same for nodes size.
+    prop_nodes_font_size = 5 - 0.1 * (N-4)
+    prop_edges_font_size = 6 - 0.3 * (N-4)
+    prop_node_size = 700 - 70 * (N-4) 
+
     lables = {(i,j):M[i][j] for i in range(n) for j in range(n) if M[i][j] > 0} 
-    nx.draw_networkx_nodes(Gd, pos, nodelist= [i for i in range(n) if r[i] == 0], node_color='green', node_size = 1200)
-    nx.draw_networkx_nodes(Gd, pos, nodelist=[i for i in range(n) if r[i]> 0], node_color='green', node_size = 1200, node_shape='v')
+    nx.draw_networkx_nodes(Gd, pos, nodelist= [i for i in range(n) if r[i] == 0], node_color='green', node_size = prop_node_size)
+    nx.draw_networkx_nodes(Gd, pos, nodelist=[i for i in range(n) if r[i]> 0], node_color='green', node_size = prop_node_size, node_shape='s')
 
     # draw sensors in purple without ruing the shape it is.
     for s in sensors:
-        nx.draw_networkx_nodes(Gd, pos, nodelist = [s], node_color='purple', node_size=1200, node_shape = shapes[s])
+        nx.draw_networkx_nodes(Gd, pos, nodelist = [s], node_color='purple', node_size=prop_node_size, node_shape = shapes[s])
     nx.draw_networkx_edges(Gd, pos, edge_color='black')
     
     if block_roads != None:
         nx.draw_networkx_edges(Gd, pos, edge_color='yellow', edgelist=block_roads)
 
-    nx.draw_networkx_edge_labels(Gd, pos, edge_labels=lables1, font_color='red', font_size=6, label_pos=0.5)
-    nx.draw_networkx_edge_labels(Gd, pos, edge_labels=lables2, fond_color='orange', font_size=6, label_pos=0.7)
-    nx.draw_networkx_labels(Gd, pos, labels=nodelables, font_size=6)
+    nx.draw_networkx_edge_labels(Gd, pos, edge_labels=lables1, font_color='red', font_size=prop_edges_font_size, label_pos=0.5)
+    nx.draw_networkx_edge_labels(Gd, pos, edge_labels=lables2, fond_color='orange', font_size=prop_edges_font_size, label_pos=0.7)
+    nx.draw_networkx_labels(Gd, pos, labels=nodelables, font_size=prop_nodes_font_size)
 
 
     plt.savefig(filename + '.png')
@@ -291,7 +297,7 @@ def main():
     if ans == 'y':
         filename = input('insert file name to save to\n')
         draw_graph_and_results(M, r, sensors, None, filename)
-        print('saved graph in {}.\ngraph explained:\ntriangle nodes are the enterence, the r[i] probability written on them.\npurple nodes are the ones with the sensors.\n'.format(filename + '.png'))
+        print('saved graph in {}.\ngraph explained:\nrectangle nodes are the enterence, the r[i] probability written on them.\npurple nodes are the ones with the sensors.\n'.format(filename + '.png'))
 
 
     print('part 2: k sensors, l road blocks')
@@ -305,7 +311,7 @@ def main():
     if ans == 'y':
         filename = input('insert file name to save to\n')
         draw_graph_and_results(M, r, sensors2, blocked_roads, filename)
-        print('saved graph in {}.\ngraph explained:\ntriangle nodes are the enterence, the r[i] probability written on them.\npurple nodes are the ones with the sensors.\npurple edges are the ones with the blocked edges.\n'.format(filename + '.png'))
+        print('saved graph in {}.\ngraph explained:\nrectangle nodes are the enterence, the r[i] probability written on them.\npurple nodes are the ones with the sensors.\nyellow edges are the ones with the blocked edges.\n'.format(filename + '.png'))
 
     print('Tnx! Have a good day...')
 if __name__== "__main__":
