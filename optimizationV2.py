@@ -255,7 +255,7 @@ def draw_graph_and_results(M, r, sensors, block_roads, filename):
     nx.draw_networkx_edges(Gd, pos, edge_color='black')
     
     if block_roads != None:
-        nx.draw_networkx_edges(Gd, pos, edge_colr='purple', edgelist=block_roads)
+        nx.draw_networkx_edges(Gd, pos, edge_color='yellow', edgelist=block_roads)
 
     nx.draw_networkx_edge_labels(Gd, pos, edge_labels=lables1, font_color='red', font_size=6, label_pos=0.5)
     nx.draw_networkx_edge_labels(Gd, pos, edge_labels=lables2, fond_color='orange', font_size=6, label_pos=0.7)
